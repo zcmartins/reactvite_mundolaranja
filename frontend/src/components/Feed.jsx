@@ -19,9 +19,9 @@ const Feed = ({ userId }) => {
     }, [userId]);
 
     return (
-        <div className="max-w-3xl mx-auto mt-8">
+        <div className="mx-auto mt-8">
             <h2 className="text-2xl font-bold mb-4 text-white">Feed de Notícias</h2>
-            <div className="bg-gray-800 px-40 pt-10 pb-0 rounded-t-lg">
+            <div className="bg-gray-800 pt-10 pb-0 rounded-t-lg">
                 {feedData.length === 0 ? (
                     <p className="text-gray-500">Carregando...</p>
                 ) : (
