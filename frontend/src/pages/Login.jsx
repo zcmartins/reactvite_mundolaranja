@@ -1,4 +1,7 @@
+// frontend/src/Login.jsx
+
 import React, { useState } from 'react';
+import axios from 'axios';
 
 const Login = () => {
     const [isRegister, setIsRegister] = useState(false);
@@ -36,18 +39,27 @@ const Login = () => {
         setIsRegister(false);
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        if (isRecover) {
-            setMessage('Email de recuperação enviado!');
-        } else if (isRegister) {
-            setMessage('Conta criada com sucesso!');
-        } else {
-            if (formData.username === 'admin' && formData.password === 'admin') {
-                setMessage('Login realizado com sucesso!');
+        try {
+            let response;
+            if (isRecover) {
+                // Implementação de recuperação de senha
+                setMessage('Email de recuperação enviado!');
+            } else if (isRegister) {
+                // Criar novo usuário
+                response = await axios.post('http://localhost:3000/usuarios', formData);
+                setMessage('Conta criada com sucesso!');
             } else {
-                setMessage('Usuário ou senha incorretos!');
+                // Realizar login
+                response = await axios.post('http://localhost:3000/usuarios/login', formData); // Alteração aqui
+                setMessage('Login realizado com sucesso!');
+                // Lógica para armazenar o token de autenticação, por exemplo localStorage
             }
+            console.log(response.data); // Exemplo de como tratar a resposta
+        } catch (error) {
+            console.error('Erro:', error);
+            setMessage('Usuário ou senha incorretos!');
         }
     };
 

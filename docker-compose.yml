@@ -1,0 +1,39 @@
+
+
+networks:
+  minha_rede:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+
+services:
+  postgres-master:
+    image: bitnami/postgresql:latest
+    environment:
+      - POSTGRESQL_REPLICATION_MODE=master
+      - POSTGRESQL_REPLICATION_USER=userbackup
+      - POSTGRESQL_REPLICATION_PASSWORD=123456
+      - POSTGRESQL_USERNAME=postgres
+      - POSTGRESQL_PASSWORD=bd123
+      - POSTGRESQL_DATABASE=master
+    volumes:
+      - ./data/master:/bitnami/postgresql
+    networks:
+      minha_rede:
+        ipv4_address: 172.20.0.22
+    ports:
+      - "5440:5432"
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@admin.com
+      - PGADMIN_DEFAULT_PASSWORD=root
+    ports:
+      - "85:85"
+    networks:
+      minha_rede:
+        ipv4_address: 172.20.0.23
+    volumes:
+      - ./data/pgadmin_data:/var/lib/pgadmin
